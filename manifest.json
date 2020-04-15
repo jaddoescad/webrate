@@ -1,0 +1,37 @@
+{
+  "manifest_version": 2,
+
+  "name": "Rate The Internet",
+  "description": "This extension allows you to rate websites",
+  "version": "1.0",
+  "icons": {
+    "128": "icon128.png",
+    "48": "icon48.png",
+    "16": "icon16.png"
+  },
+  "browser_action": {
+    "default_icon": "icon16.png",
+    "default_popup": "popup.html"
+  },
+  "content_security_policy":"script-src 'self' https://www.gstatic.com/ https://*.firebaseio.com https://www.googleapis.com; object-src 'self'",
+  "options_page": "options.html",
+  "content_scripts": [
+    {
+      "matches": ["https://www.google.com/*"],
+      "js": ["jquery-3.1.0.min.js", "content.js"],
+      "css": ["content.css"],
+      "run_at": "document_end"
+    }
+  ],
+  "permissions": [
+    "storage",
+    "notifications",
+    "contextMenus",
+    "tabs",
+    "https://www.google.com/*"
+  ],
+  "background": {
+    "page":"eventPage.html",
+    "persistent": false
+  }
+}
