@@ -1,29 +1,31 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <title>WEBRATE</title>
-        <script src="jquery-3.1.0.min.js"></script>
-        <script src="https://www.gstatic.com/firebasejs/7.14.0/firebase.js"></script>
-        <script src="popup.js"></script>
-        <link rel="stylesheet" type="text/css" href="popup.css">
-    </head>
-    <body>
-        <div class= "header-background">
-        <img class= "logoheader" src="LogoHeader.png" alt="">
-    </div>
-
-
-        <a href="">
-            <img class="profile-image" src="profile.png" alt="profile">
+<head>
+    <title>WEBRATE</title>
+    <script src="jquery-3.1.0.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.14.0/firebase.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/ui/4.5.0/firebase-ui-auth.js"></script>
+    <link type="text/css" rel="stylesheet" href="https://www.gstatic.com/firebasejs/ui/4.5.0/firebase-ui-auth.css" />
+    <script src="popup.js"></script>
+    <script src="signin.js"></script>
+    <link rel="stylesheet" type="text/css" href="popup.css">
+</head>
+<body>
+    <!-- <div id="firebaseui-auth-container"></div> -->
+    <div class="main-page">
+        <div class="header-background">
+            <img class="logoheader" src="LogoHeader.png" alt="">
+        </div>
+        <a class= "profile-a" href="profile.html">
+        <img class="profile-image" src="profile.png" alt="profile">
         </a>
-
         <div class="website-url"></div>
         <div class="rating-container"></div>
-       <div class="button-review-container">
-        <a class="review-button" href="">Leave a review</a>
-
-       </div> 
-
-        
-    </body>
+        <div class="review_num"></div>
+        <div class="noreviews"></div>
+        <div class="button-review-container">
+        <a class="review-button" href="createReview.html">Leave a review</a>
+        </div>
+    </div>
+</body>
 </html>

@@ -43,27 +43,41 @@ $(function(){
         var domain = get_domain(tabs[0].url);
         var averageReview = 0;
   
-        db.collection("Reviews")
-          .where("domain", "in", [domain])
-          .get()
-          .then(function (querySnapshot) {
-            querySnapshot = snapshotToArray(querySnapshot);
-            //   console.log(querySnapshot);
-            if (querySnapshot.length) {
-              let result = querySnapshot.map((a) => a.review);
-              averageReview = Math.round(average(result) * 10) / 10;
-              console.log(averageReview);
-              $('.rating-container').append('<span class="stars" data-rating="4" ></span><div class="results"><div class="results-content"><span class="stars">'+averageReview+'</span> </div></div> ')
-              $('.results-content span.stars').stars();
-            //   chrome.browserAction.setBadgeText({
-            //     text: averageReview.toString(),
-            //   });
+        // db.collection("Reviews")
+        //   .where("domain", "in", [domain])
+        //   .get()
+        //   .then(function (querySnapshot) {
+        //     querySnapshot = snapshotToArray(querySnapshot);
+        //     //   console.log(querySnapshot);
+        //     if (querySnapshot.length) {
+        //       let result = querySnapshot.map((a) => a.review);
+        //       averageReview = Math.round(average(result) * 10) / 10;
+        //       console.log(averageReview);
+ 
+        chrome.runtime.sendMessage({action: "get_tab_review", domain: domain.toString()}, function(response) {
+            console.log(response[domain]);
+            if (response[domain]){
+                $('.rating-container').append('<span class="stars" data-rating="4" ></span><div class="results"><div class="results-content"><span class="stars">'+response[domain].average+'</span> </div></div> ')
+                $('.results-content span.stars').stars();
+                $('.review_num').text(response[domain].average+' ('+response[domain].total+ ')')
             } else {
-            //   chrome.browserAction.setBadgeText({
-            //       text: "",
-            //     });
+                console.log('here');
+                $('.noreviews').text('No Reviews.');
             }
+
           });
+
+
+ 
+        //     //   chrome.browserAction.setBadgeText({
+        //     //     text: averageReview.toString(),
+        //     //   });
+        //     } else {
+        //     //   chrome.browserAction.setBadgeText({
+        //     //       text: "",
+        //     //     });
+        //     }
+        //   });
     });
 
 
@@ -107,6 +121,11 @@ $(function(){
     // });
 });
 
+$(".profile-image").click(function(){
+    console.log("hello")
+    return false;
+});
+
 
 function get_domain(url) {
     url = new URL(url);
@@ -127,3 +146,11 @@ function snapshotToArray(snapshot) {
     });
     return returnArr;
   }
+
+
+  $(function(){
+    $(document).on('click','.profile-image',function(){
+        chrome.browserAction.setPopup({popup: "createReview.html"});
+        location.href='createReview.html';
+    }); 
+ });
