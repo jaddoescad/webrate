@@ -1,3 +1,35 @@
 /* * {
     background-color: red;
 } */
+
+.stars-container {
+    position: relative;
+    display: inline-block;
+    color: transparent;
+  }
+  
+  .stars-container:before {
+    position: absolute;
+    top: 0;
+    left: 0;
+    content: '★★★★★';
+    color: lightgray;
+  }
+  
+  .stars-container:after {
+    position: absolute;
+    top: 0;
+    left: 0;
+    content: '★★★★★';
+    color: black;
+    overflow: hidden;
+  }
+
+  .stars {
+      float: left;
+      padding-right: 10px;
+  }
+
+  .ratingView {
+      padding-top: 10px;
+  }

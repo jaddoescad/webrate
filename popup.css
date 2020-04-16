@@ -1,0 +1,75 @@
+.header-background {
+    /* background-color: #3C3C3C; */
+    /* padding: 0; */
+    border-bottom: 0.1px solid black;
+    text-align: center; 
+    padding-bottom: 30px;
+    padding-top: 30px;
+    position:relative;
+}
+
+
+body {
+    margin: 0px !important;
+    width: 500px;
+
+}
+
+.logoheader {
+    width: 150px;
+    margin: auto;
+    display:block;
+}
+
+.profile-image {
+
+    width:30px;
+    /* height:30px;
+    border:0;*/
+    padding-right: 20px; 
+    position:absolute; 
+    top:30px; 
+    right:0;
+    /* padding: 30; */
+}
+
+.website-url{
+    padding-left: 20px;
+    padding-top: 40px;
+    padding-bottom: 12px;
+    font-family: monospace;
+    font-size: 1.8rem;
+}
+
+.results {
+    font-size: 0;
+    padding-bottom: 80px;
+    
+  }
+  .results-content {
+    font-size: 13px;
+    display: inline-block;
+    margin-left: 20px;
+    vertical-align: top;
+    background: url('rwkqF.png') 0 0 repeat-x;
+    width: 185px;
+    height: 35px;
+  }
+  .results .results-content span.stars span {
+    background: url('rwkqF.png') 0 -36px repeat-x;
+    display: inline-block;
+    height: 35px;
+  }
+
+  .button-review-container {
+
+      font-size: 1.3rem;
+      text-align: center; 
+      margin: 0 auto;
+
+  }
+  .review-button{
+    text-decoration:none;
+    /* padding-top: 1000px; */
+    padding-bottom: 30px;
+  }
