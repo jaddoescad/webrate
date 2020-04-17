@@ -64,22 +64,32 @@ $(function () {
       $("#rating-5").click(function (e) {
         console.log(get_domain(url));
         updateFirebase(domain, 5);
+        $(".review-text").text("You left a "+5+" star review.");
+
       });
       $("#rating-4").click(function (e) {
         console.log(get_domain(url));
         updateFirebase(domain, 4);
+        $(".review-text").text("You left a "+4+" star review.");
+
       });
       $("#rating-3").click(function (e) {
         console.log(get_domain(url));
         updateFirebase(domain, 3);
+        $(".review-text").text("You left a "+3+" star review.");
+
       });
       $("#rating-2").click(function (e) {
         console.log(get_domain(url));
         updateFirebase(domain, 2);
+        $(".review-text").text("You left a "+2+" star review.");
+
       });
       $("#rating-1").click(function (e) {
         console.log(get_domain(url));
         updateFirebase(domain, 1);
+        $(".review-text").text("You left a "+1+" star review.");
+
       });
     }
   );
@@ -104,10 +114,7 @@ $(function () {
         
        var rating = response[get_domain(url)+"_myreview"].rating;
        $(".review-text").text("You left a "+rating+" star review.");
-        // console.log(rating)
        $("#rating-"+String(rating)).prop("checked", true);
-
-
       }
     );
   });
