@@ -41,11 +41,28 @@ body {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    border-bottom: 0.1px solid black;
+    text-align: center; 
+    height: 60px;
   }
 
   .header-background .Fresh.Mango {
-    background-image: url(https://image.flaticon.com/icons/svg/8/8764.svg);
+    background-image: url(backbutton.png);
     cursor: pointer;
-    width: 20px;
-    height: 20px;
+    width: 50px;
+    background-repeat: no-repeat;
+    height: 100%;
+    background-position: center;
   }
+
+.logoheader {
+    width: 150px;
+    margin: auto;
+    display:block;
+    flex: 0 1 auto;
+    position: absolute;             /* new */
+    left: 50%;
+    transform: translateX(-50%);
+    font-weight: 600;
+    font-size: 1.3rem;
+}
