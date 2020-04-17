@@ -20,7 +20,6 @@ var db = firebase.firestore();
 
 let average = (array) => array.reduce((a, b) => a + b) / array.length;
 
-
 chrome.tabs.onActivated.addListener(function (activeInfo, tab) {
   chrome.tabs.query(
     {
@@ -28,6 +27,9 @@ chrome.tabs.onActivated.addListener(function (activeInfo, tab) {
       active: true,
     },
     function (tabs) {
+      chrome.browserAction.setBadgeText({
+        text: "",
+      });
       // $('#total').text(tabs[0].url);
       //   var randomnum = Math.floor(Math.random() * (5 - 0) + 0) / 100;
       //   chrome.browserAction.setBadgeText({
@@ -49,23 +51,26 @@ chrome.tabs.onActivated.addListener(function (activeInfo, tab) {
           if (querySnapshot.length) {
             let result = querySnapshot.map((a) => a.review);
             averageReview = Math.round(average(result) * 10) / 10;
-            
+
             chrome.browserAction.setBadgeText({
               text: averageReview.toString(),
             });
 
-            var reviewObject = {}
-            reviewObject[domain.toString()] = {average: averageReview.toString(), total: querySnapshot.length};
+            var reviewObject = {};
+            reviewObject[domain.toString()] = {
+              average: averageReview.toString(),
+              total: querySnapshot.length,
+            };
 
             // console.log(reviewObject);
-            chrome.storage.sync.set(reviewObject, function(){
-                //  A data saved callback omg so fancy
-                console.log("Object Stored")
+            chrome.storage.sync.set(reviewObject, function () {
+              //  A data saved callback omg so fancy
+              console.log("Object Stored");
             });
           } else {
             chrome.browserAction.setBadgeText({
-                text: "",
-              });
+              text: "",
+            });
           }
         });
     }
@@ -73,45 +78,49 @@ chrome.tabs.onActivated.addListener(function (activeInfo, tab) {
 });
 
 chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
+  chrome.browserAction.setBadgeText({
+    text: "",
+  });
   if (changeInfo.status == "complete") {
     console.log("completed");
 
     var domain = get_domain(tab.url);
-      var averageReview = 0;
-      get_myrating(domain);
+    var averageReview = 0;
+    get_myrating(domain);
 
-      db.collection("Reviews")
-        .where("domain", "in", [domain])
-        .get()
-        .then(function (querySnapshot) {
-          querySnapshot = snapshotToArray(querySnapshot);
-          //   console.log(querySnapshot);
-          if (querySnapshot.length) {
-            let result = querySnapshot.map((a) => a.review);
-            averageReview = Math.round(average(result) * 10) / 10;
-            
-            chrome.browserAction.setBadgeText({
-              text: averageReview.toString(),
-            });
+    db.collection("Reviews")
+      .where("domain", "in", [domain])
+      .get()
+      .then(function (querySnapshot) {
+        querySnapshot = snapshotToArray(querySnapshot);
+        //   console.log(querySnapshot);
+        if (querySnapshot.length) {
+          let result = querySnapshot.map((a) => a.review);
+          averageReview = Math.round(average(result) * 10) / 10;
 
-            var reviewObject = {}
-            reviewObject[domain.toString()] = {average: averageReview.toString(), total: querySnapshot.length};
-            // console.log(reviewObject);
-            chrome.storage.sync.set(reviewObject, function(){
-                //  A data saved callback omg so fancy
-                console.log("Object Stored")
-            });
-          } else {
-            chrome.browserAction.setBadgeText({
-                text: "",
-              });
-          }
-        });
+          chrome.browserAction.setBadgeText({
+            text: averageReview.toString(),
+          });
+
+          var reviewObject = {};
+          reviewObject[domain.toString()] = {
+            average: averageReview.toString(),
+            total: querySnapshot.length,
+          };
+          // console.log(reviewObject);
+          chrome.storage.sync.set(reviewObject, function () {
+            //  A data saved callback omg so fancy
+            console.log("Object Stored");
+          });
+        } else {
+          chrome.browserAction.setBadgeText({
+            text: "",
+          });
+        }
+      });
     // do your things
   }
 });
-
-
 
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   var snapshots = [];
@@ -145,22 +154,22 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
     });
   } else if (request.action == "get_tab_review") {
     //   console.log(request.domain);
-    chrome.storage.sync.get(request.domain, function(items){
-        // console.log(items);
-        //  items = [ { "yourBody": "myBody" } ]
-        sendResponse(items);
+    chrome.storage.sync.get(request.domain, function (items) {
+      // console.log(items);
+      //  items = [ { "yourBody": "myBody" } ]
+      sendResponse(items);
     });
-    
-
   } else if (request.action == "get_my_review") {
     //   console.log("getting my review");
-    chrome.storage.sync.get(request.domain+"_myreview", function(items){
-        // console.log(items);
-        //  items = [ { "yourBody": "myBody" } ]
-        // console.log("hello");
-        // console.log(items);
-        sendResponse(items);
+    chrome.storage.sync.get(request.domain + "_myreview", function (items) {
+      // console.log(items);
+      //  items = [ { "yourBody": "myBody" } ]
+      // console.log("hello");
+      // console.log(items);
+      sendResponse(items);
     });
+  } else if (request.action == "add_review") {
+    updateFirebase(request.domain, request.rating, sendResponse);
   }
   return true;
 });
@@ -190,42 +199,110 @@ function get_domain(url) {
   return domain;
 }
 
-
-
 function get_myrating(domain) {
-    firebase.auth().onAuthStateChanged(function (user) {
-        if (user) {
-          db.collection("Reviews")
-            .where("email", "==", user.email)
-            .where("domain", "==", domain)
-            .limit(1)
-            .get()
-            .then(function (querySnapshot) {
-              console.log(querySnapshot);
-              if (!querySnapshot.empty) {
-                querySnapshot.forEach(function (doc) {
-                  if (doc.exists) {
-                    console.log(doc.data().review);
-                    // $("#rating-" + doc.data().review).prop("checked", true);
-                    var myReview = {}
-                    myReview[domain.toString()+"_myreview"] = {rating: doc.data().review};
-        
-                    // console.log(reviewObject);
-                    console.log(myReview);
-                    chrome.storage.sync.set(myReview, function(){
-                        //  A data saved callback omg so fancy
-                        console.log("my review Stored")
-                    });
-                  }
+  firebase.auth().onAuthStateChanged(function (user) {
+    if (user) {
+      db.collection("Reviews")
+        .where("email", "==", user.email)
+        .where("domain", "==", domain)
+        .limit(1)
+        .get()
+        .then(function (querySnapshot) {
+          console.log(querySnapshot);
+          if (!querySnapshot.empty) {
+            querySnapshot.forEach(function (doc) {
+              if (doc.exists) {
+                console.log(doc.data().review);
+                // $("#rating-" + doc.data().review).prop("checked", true);
+                var myReview = {};
+                myReview[domain.toString() + "_myreview"] = {
+                  rating: doc.data().review,
+                };
+
+                // console.log(reviewObject);
+                console.log(myReview);
+                chrome.storage.sync.set(myReview, function () {
+                  //  A data saved callback omg so fancy
+                  console.log("my review Stored");
                 });
               }
-            })
-            .catch(function (error) {
-              console.log("Error getting document:", error);
             });
-        }
-      });
+          }
+        })
+        .catch(function (error) {
+          console.log("Error getting document:", error);
+        });
+    }
+  });
 }
-   
 
-  
+function updateFirebase(domain, rating, sendResponse) {
+  console.log("updating review");
+  var review = db.collection("Reviews");
+  // Set the "capital" field of the city 'DC'
+  // Add a new document with a generated id.
+  firebase.auth().onAuthStateChanged(function (user) {
+    if (user) {
+      //check if review exists
+
+      db.collection("Reviews")
+        .where("email", "==", user.email)
+        .where("domain", "==", domain)
+        .limit(1)
+        .get()
+        .then(function (querySnapshot) {
+          console.log(querySnapshot);
+          if (!querySnapshot.empty) {
+            console.log(querySnapshot);
+            querySnapshot.forEach(function (doc) {
+              if (doc.exists) {
+                console.log("doc exists");
+                review
+                  .doc(doc.id)
+                  .update({
+                    review: rating,
+                  })
+                  .then(function () {
+                    console.log("Document successfully updated!");
+                    sendResponse("success");
+                  })
+                  .catch(function (error) {
+                    // The document probably doesn't exist.
+                    console.error("Error updating document: ", error);
+                    sendResponse("error");
+                  });
+              } else {
+                console.log("doc does not exist");
+                add_review_to_firebase(review, domain, user.email, rating);
+              }
+            });
+
+            // User is signed in.
+          } else {
+            console.log("snapshot is empty");
+            add_review_to_firebase(review, domain, user.email, rating, sendResponse);
+          }
+        })
+        .catch(function (error) {
+          console.log("Error getting document:", error);
+        });
+    }
+  });
+}
+
+function add_review_to_firebase(review, domain, email, rating, sendResponse) {
+  review
+    .add({
+      domain: domain,
+      email: email,
+      review: rating,
+    })
+    .then(function (docRef) {
+      console.log("Document written with ID: ", docRef.id);
+      sendResponse("success");
+    })
+    .catch(function (error) {
+      console.error("Error adding document: ", error);
+      sendResponse("error");
+    });
+}

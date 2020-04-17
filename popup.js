@@ -147,10 +147,3 @@ function snapshotToArray(snapshot) {
     return returnArr;
   }
 
-
-  $(function(){
-    $(document).on('click','.profile-image',function(){
-        chrome.browserAction.setPopup({popup: "createReview.html"});
-        location.href='createReview.html';
-    }); 
- });

@@ -126,71 +126,6 @@ $(function () {
   );
 });
 
-function updateFirebase(domain, rating) {
-  var review = db.collection("Reviews");
-  // Set the "capital" field of the city 'DC'
-  // Add a new document with a generated id.
-  firebase.auth().onAuthStateChanged(function (user) {
-    if (user) {
-      //check if review exists
-
-      db.collection("Reviews")
-        .where("email", "==", user.email)
-        .where("domain", "==", domain)
-        .limit(1)
-        .get()
-        .then(function (querySnapshot) {
-          console.log(querySnapshot);
-          if (!querySnapshot.empty) {
-            console.log(querySnapshot);
-            querySnapshot.forEach(function (doc) {
-              if (doc.exists) {
-                console.log("doc exists");
-                review
-                  .doc(doc.id)
-                  .update({
-                    review: rating,
-                  })
-                  .then(function () {
-                    console.log("Document successfully updated!");
-                  })
-                  .catch(function (error) {
-                    // The document probably doesn't exist.
-                    console.error("Error updating document: ", error);
-                  });
-              } else {
-                console.log("doc does not exist");
-                add_review_to_firebase(review, domain, user.email, rating);
-              }
-            });
-
-            // User is signed in.
-          } else {
-            console.log("snapshot is empty");
-            add_review_to_firebase(review, domain, user.email, rating);
-          }
-        })
-        .catch(function (error) {
-          console.log("Error getting document:", error);
-        });
-    }
-  });
-}
-
-function add_review_to_firebase(review, domain, email, rating) {
-  review
-    .add({
-      domain: domain,
-      email: email,
-      review: rating,
-    })
-    .then(function (docRef) {
-      console.log("Document written with ID: ", docRef.id);
-    })
-    .catch(function (error) {
-      console.error("Error adding document: ", error);
-    });
-}
 
 function get_domain(url) {
   url = new URL(url);
@@ -217,3 +152,18 @@ $(function () {
     );
   });
 });
+
+function updateFirebase(domain, rating) {
+  chrome.runtime.sendMessage(
+    { action: "add_review", domain: domain.toString(), rating: rating},
+    function (response) {
+    //   url = new URL(tabs[0].url);
+      
+    //  var rating = response[get_domain(url)+"_myreview"].rating;
+    //   // console.log(rating)
+    //  $("#rating-"+String(rating)).prop("checked", true);
+      console.log(response);
+
+    }
+  );
+}
