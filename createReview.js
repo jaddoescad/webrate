@@ -11,6 +11,7 @@ var firebaseConfig = {
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
 var db = firebase.firestore();
+var loggingIn = false;
 
 var uiConfig = {
   signInSuccessUrl: "createReview.html",
@@ -38,23 +39,28 @@ var uiConfig = {
 var ui = new firebaseui.auth.AuthUI(firebase.auth());
 // The start method will wait until the DOM is loaded.
 firebase.auth().onAuthStateChanged(function (user) {
+  
   if (user) {
     // User is signed in.
-    console.log("already signed in");
-    console.log(user);
-    $(".username").text(user.displayName);
-    $(".email").text(user.email);
-    $(".LeaveReview").show();
-    $(".main-page").show();
-    setTimeout(function () {
-      $(".profileUI").show();
-      $("#overlay").fadeOut(300);
-    }, 500);
+    if (loggingIn == false) {
+      console.log("attempting")
+      $(".username").text(user.displayName);
+      $(".email").text(user.email);
+      $(".LeaveReview").show();
+      $(".main-page").show();
+  
+      setTimeout(function () {
+        $(".profileUI").show();
+        $("#overlay").fadeOut(300);
+      }, 500);
+    }
+    
   } else {
     console.log("signing in");
-    ui.start("#firebaseui-auth-container", uiConfig);
     $(".LeaveReview").hide();
     $(".main-page").hide();
+    loggingIn = true
+    ui.start("#firebaseui-auth-container", uiConfig);
     setTimeout(function () {
       $(".profileUI").show();
       $("#overlay").fadeOut(300);
@@ -106,27 +112,27 @@ $(function () {
       url = new URL(tabs[0].url);
       domain = get_domain(url);
 
-      $("#rating-5").click(function (e) {
+      $("#rating-5").on("click",function (e) {
         console.log(get_domain(url));
         updateFirebase(domain, 5);
         $(".review-text").text("You left a " + 5 + " star review.");
       });
-      $("#rating-4").click(function (e) {
+      $("#rating-4").on("click",function (e) {
         console.log(get_domain(url));
         updateFirebase(domain, 4);
         $(".review-text").text("You left a " + 4 + " star review.");
       });
-      $("#rating-3").click(function (e) {
+      $("#rating-3").on("click",function (e) {
         console.log(get_domain(url));
         updateFirebase(domain, 3);
         $(".review-text").text("You left a " + 3 + " star review.");
       });
-      $("#rating-2").click(function (e) {
+      $("#rating-2").on("click",function (e) {
         console.log(get_domain(url));
         updateFirebase(domain, 2);
         $(".review-text").text("You left a " + 2 + " star review.");
       });
-      $("#rating-1").click(function (e) {
+      $("#rating-1").on("click",function (e) {
         console.log(get_domain(url));
         updateFirebase(domain, 1);
         $(".review-text").text("You left a " + 1 + " star review.");
