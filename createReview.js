@@ -42,19 +42,23 @@ firebase.auth().onAuthStateChanged(function (user) {
     // User is signed in.
     console.log("already signed in");
     console.log(user);
-    // $(".main-page").css({"display":""});
-    // var $yourUl = $("#yourUlId");
-    // $(".main-page").css("display", $(".main-page").css("display") === 'none' ? '' : 'none');
     $(".username").text(user.displayName);
     $(".email").text(user.email);
     $(".LeaveReview").show();
     $(".main-page").show();
+    setTimeout(function () {
+      $(".profileUI").show();
+      $("#overlay").fadeOut(300);
+    }, 500);
   } else {
-    // No user is signed in.
     console.log("signing in");
     ui.start("#firebaseui-auth-container", uiConfig);
     $(".LeaveReview").hide();
     $(".main-page").hide();
+    setTimeout(function () {
+      $(".profileUI").show();
+      $("#overlay").fadeOut(300);
+    }, 500);
   }
 });
 
