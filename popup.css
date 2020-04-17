@@ -51,12 +51,14 @@ body {
     display: inline-block;
     margin-left: 20px;
     vertical-align: top;
-    background: url('rwkqF.png') 0 0 repeat-x;
-    width: 185px;
+    background: url('assets/rwkqF.png') 0 0 repeat-x;
+    width: 180px;
     height: 35px;
   }
+
+  
   .results .results-content span.stars span {
-    background: url('rwkqF.png') 0 -36px repeat-x;
+    background: url('assets/rwkqF.png') 0 -36px repeat-x;
     display: inline-block;
     height: 35px;
   }
