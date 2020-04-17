@@ -5,6 +5,7 @@
     <script src="jquery-3.1.0.min.js"></script>
     <script src="https://www.gstatic.com/firebasejs/7.14.0/firebase.js"></script>
     <script src="https://www.gstatic.com/firebasejs/ui/4.5.0/firebase-ui-auth.js"></script>
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
     <link type="text/css" rel="stylesheet" href="https://www.gstatic.com/firebasejs/ui/4.5.0/firebase-ui-auth.css" />
     <script src="popup.js"></script>
     <script src="signin.js"></script>
@@ -16,19 +17,22 @@
         <div class="header-background">
             <img class="logoheader" src="assets/LogoHeader.png" alt="">
         </div>
+        
         <a class= "profile-a" href="profile.html">
         <img class="profile-image" src="assets/profile.png" alt="profile">
         </a>
         <div class="website-url"></div>
 
 
-
-        <div class="rating-container"></div>
+        <div class="rating-wrapper"> 
+        <!-- <div class="rating-container"></div> -->
+        <b>Rating: <span id=stars></span></b>
         <div class="review_num"></div>
         <div class="noreviews"></div>
-        <div class="button-review-container">
-        <a class="review-button" href="createReview.html">Leave a review</a>
+        <div class="button-review-container"> </div>
         </div>
+        <a class="review-button" href="createReview.html">Leave a review</a>
+   
     </div>
 </body>
 </html>

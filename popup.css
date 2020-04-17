@@ -43,24 +43,28 @@ body {
 
 .results {
     font-size: 0;
-    padding-bottom: 80px;
+    display:inline;
+    position: relative;
+    
+    /* padding-bottom: 80px; */
     
   }
   .results-content {
-    font-size: 13px;
     display: inline-block;
-    margin-left: 20px;
+    /* margin-left: 20px; */
     vertical-align: top;
     background: url('assets/rwkqF.png') 0 0 repeat-x;
-    width: 180px;
-    height: 35px;
+    width: 120px;
+    height: 20px;
+    /* font-size: 0px; */
   }
 
-  
+
   .results .results-content span.stars span {
-    background: url('assets/rwkqF.png') 0 -36px repeat-x;
+    background: url('assets/rwkqF.png') 0 -20px repeat-x;
     display: inline-block;
-    height: 35px;
+    height: 100px;
+    width: -20px
   }
 
   .button-review-container {
@@ -79,3 +83,15 @@ body {
   .main-page {
     display: none;
   } */
+
+
+  
+
+
+.rating-wrapper {
+  display: flex;
+}
+
+.fa {
+  font-size: 15px;
+}

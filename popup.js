@@ -57,8 +57,9 @@ $(function(){
         chrome.runtime.sendMessage({action: "get_tab_review", domain: domain.toString()}, function(response) {
             console.log(response[domain]);
             if (response[domain]){
-                $('.rating-container').append('<span class="stars" data-rating="4" ></span><div class="results"><div class="results-content"><span class="stars">'+response[domain].average+'</span> </div></div> ')
-                $('.results-content span.stars').stars();
+                // $('.rating-container').append('<span class="stars" data-rating="4" ></span><div class="results"><div class="results-content"><span class="stars">'+response[domain].average+'</span> </div></div> ')
+                // $('.results-content span.stars').stars();
+                document.getElementById("stars").innerHTML = getStars(response[domain].average);
                 $('.review_num').text(response[domain].average+' ('+response[domain].total+ ')')
             } else {
                 console.log('here');
@@ -147,3 +148,24 @@ function snapshotToArray(snapshot) {
     return returnArr;
   }
 
+
+  function getStars(rating) {
+
+    // Round to nearest half
+    rating = Math.round(rating * 2) / 2;
+    let output = [];
+  
+    // Append all the filled whole stars
+    for (var i = rating; i >= 1; i--)
+      output.push('<i class="fa fa-star" aria-hidden="true" style="color: black;"></i>&nbsp;');
+  
+    // If there is a half a star, append it
+    if (i == .5) output.push('<i class="fa fa-star-half-o" aria-hidden="true" style="color: black;"></i>&nbsp;');
+  
+    // Fill the empty stars
+    for (let i = (5 - rating); i >= 1; i--)
+      output.push('<i class="fa fa-star-o" aria-hidden="true" style="color: black;"></i>&nbsp;');
+  
+    return output.join('');
+  
+  }
