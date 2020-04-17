@@ -66,7 +66,7 @@ $(function () {
       .then(
         function () {
           console.log("Signed Out");
-          window.location.href = "popup.html";
+          // window.location.href = "popup.html";
         },
         function (error) {
           console.error("Sign Out Error", error);

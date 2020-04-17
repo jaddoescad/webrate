@@ -26,11 +26,7 @@ $.fn.stars = function() {
       $(this).empty().append($span);
     });
   }
-  
-//   $(function() {
-//     console.log("Calling stars()");
-//     $('.results-content span.stars').stars();
-//   });
+
 
 $(function(){
     var url;
@@ -42,17 +38,6 @@ $(function(){
 
         var domain = get_domain(tabs[0].url);
         var averageReview = 0;
-  
-        // db.collection("Reviews")
-        //   .where("domain", "in", [domain])
-        //   .get()
-        //   .then(function (querySnapshot) {
-        //     querySnapshot = snapshotToArray(querySnapshot);
-        //     //   console.log(querySnapshot);
-        //     if (querySnapshot.length) {
-        //       let result = querySnapshot.map((a) => a.review);
-        //       averageReview = Math.round(average(result) * 10) / 10;
-        //       console.log(averageReview);
  
         chrome.runtime.sendMessage({action: "get_tab_review", domain: domain.toString()}, function(response) {
             console.log(response[domain]);
@@ -67,59 +52,7 @@ $(function(){
             }
 
           });
-
-
- 
-        //     //   chrome.browserAction.setBadgeText({
-        //     //     text: averageReview.toString(),
-        //     //   });
-        //     } else {
-        //     //   chrome.browserAction.setBadgeText({
-        //     //       text: "",
-        //     //     });
-        //     }
-        //   });
     });
-
-
-    // console.log(get_domain(url));
-    
-    // chrome.storage.sync.get(['total','limit'],function(budget){
-    //     $('#total').text(budget.total);
-    //     $('#limit').text(budget.limit);
-    // });
-
-    // $('#spendAmount').click(function(){
-    //     chrome.storage.sync.get(['total', 'limit'],function(budget){
-    //         var newTotal = 0;
-    //         if (budget.total){
-    //             newTotal += parseInt(budget.total);
-    //         }
-
-    //         var amount = $('#amount').val();
-    //         if (amount){
-    //             newTotal += parseInt(amount);
-    //         }
-
-    //         chrome.storage.sync.set({'total': newTotal}, function(){               
-    //             if (amount && newTotal >= budget.limit){
-    //                 var notifOptions = {
-    //                     type: "basic",
-    //                     iconUrl: "icon48.png",
-    //                     title: "Limit reached!",
-    //                     message: "Uh oh, look's like you've reached your alloted limit."
-    //             };
-    //             chrome.notifications.create('limitNotif', notifOptions);
-
-    //         }
-    //         });
-    //         $('#total').text(newTotal);
-    //         $('#amount').val('');
-
-           
-
-    //     });
-    // });
 });
 
 $(".profile-image").click(function(){
