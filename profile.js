@@ -15,8 +15,8 @@ var uiConfig = {
   signInSuccessUrl: "profile.html",
   signInOptions: [
     // Leave the lines as is for the providers you want to offer your users.
-      // firebase.auth.GoogleAuthProvider.PROVIDER_ID,
-      // firebase.auth.FacebookAuthProvider.PROVIDER_ID,
+    // firebase.auth.GoogleAuthProvider.PROVIDER_ID,
+    // firebase.auth.FacebookAuthProvider.PROVIDER_ID,
     //   firebase.auth.TwitterAuthProvider.PROVIDER_ID,
     //   firebase.auth.GithubAuthProvider.PROVIDER_ID,
     firebase.auth.EmailAuthProvider.PROVIDER_ID,
@@ -33,39 +33,37 @@ var uiConfig = {
   },
 };
 
-
 $(function () {
-  console.log("loading..")
-// Initialize the FirebaseUI Widget using Firebase.
-var ui = new firebaseui.auth.AuthUI(firebase.auth());
-// The start method will wait until the DOM is loaded.
-firebase.auth().onAuthStateChanged(function (user) {
-  // $("#overlay").fadeIn(300);
-  if (user) {
-    // User is signed in.
-    console.log("already signed in");
-    console.log(user);
-    // $(".main-page").css({"display":""});
-    // var $yourUl = $("#yourUlId");
-    // $(".main-page").css("display", $(".main-page").css("display") === 'none' ? '' : 'none');
-    $(".username").text(user.displayName);
-    $(".profileUI").show();
-    $(".email").text(user.email);
-    setTimeout(function(){
-      $("#overlay").fadeOut(300);
-    },500);
-  } else {
-    // No user is signed in.
-    console.log("signing in");
-    $(".profileUI").hide();
-    ui.start("#firebaseui-auth-container", uiConfig);
-    setTimeout(function(){
-      $("#overlay").fadeOut(300);
-    },500);
-  }
+  console.log("loading..");
+  // Initialize the FirebaseUI Widget using Firebase.
+  var ui = new firebaseui.auth.AuthUI(firebase.auth());
+  // The start method will wait until the DOM is loaded.
+  firebase.auth().onAuthStateChanged(function (user) {
+    // $("#overlay").fadeIn(300);
+    if (user) {
+      // User is signed in.
+      console.log("already signed in");
+      console.log(user);
+      // $(".main-page").css({"display":""});
+      // var $yourUl = $("#yourUlId");
+      // $(".main-page").css("display", $(".main-page").css("display") === 'none' ? '' : 'none');
+      $(".username").text(user.displayName);
+      $(".email").text(user.email);
+      setTimeout(function () {
+        $(".profileUI").show();
+        $("#overlay").fadeOut(300);
+      }, 500);
+      
+    } else {
+      // No user is signed in.
+      $(".profileUI").hide();
+      ui.start("#firebaseui-auth-container", uiConfig);
+      setTimeout(function () {
+        $("#overlay").fadeOut(300);
+      }, 500);
+    }
+  });
 });
-});
-
 
 $(function () {
   $("#sb").click(function (e) {
@@ -78,8 +76,6 @@ $(function () {
         function () {
           console.log("Signed Out");
           // window.location.href = 'popup.html';
-
-
         },
         function (error) {
           console.error("Sign Out Error", error);

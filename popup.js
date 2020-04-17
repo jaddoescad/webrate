@@ -42,8 +42,6 @@ $(function(){
         chrome.runtime.sendMessage({action: "get_tab_review", domain: domain.toString()}, function(response) {
             console.log(response[domain]);
             if (response[domain]){
-                // $('.rating-container').append('<span class="stars" data-rating="4" ></span><div class="results"><div class="results-content"><span class="stars">'+response[domain].average+'</span> </div></div> ')
-                // $('.results-content span.stars').stars();
                 document.getElementById("stars").innerHTML = getStars(response[domain].average);
                 $('.review_num').text(response[domain].average+' ('+response[domain].total+ ')')
             } else {

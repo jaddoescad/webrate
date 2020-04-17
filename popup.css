@@ -12,7 +12,7 @@
 body {
     margin: 0px !important;
     width: 400px;
-    height: 400px
+    height: 250px
 
 }
 
@@ -35,11 +35,11 @@ body {
 }
 
 .website-url{
-    padding-left: 20px;
-    padding-top: 40px;
-    padding-bottom: 12px;
     font-family: monospace;
-    font-size: 1.8rem;
+    font-size: 1.5rem;
+    padding-top: 20px;
+    padding-bottom: 10px;
+    padding-left: 20px;
 }
 
 .results {
@@ -77,8 +77,21 @@ body {
   }
   .review-button{
     text-decoration:none;
+    font-size: 1.2rem;
     /* padding-top: 1000px; */
-    padding-bottom: 30px;
+    /* padding-bottom: 30px; */
+    /* margin: 0 auto; */
+    
+  }
+  .review-button-div{
+    text-decoration:none;
+    padding-top: 30px;
+    width: 100%;
+    text-align: center;
+    /* padding-top: 1000px; */
+    /* padding-bottom: 30px; */
+    /* margin: 0 auto; */
+    
   }
 /* 
   .main-page {
@@ -95,4 +108,8 @@ body {
 
 .fa {
   font-size: 15px;
+}
+
+.rating-wrapper{
+  padding-left: 20px;
 }
