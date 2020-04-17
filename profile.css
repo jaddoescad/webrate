@@ -35,3 +35,17 @@ body {
 .is-hide{
 	display:none;
 }
+
+
+.header-background {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .header-background .Fresh.Mango {
+    background-image: url(https://image.flaticon.com/icons/svg/8/8764.svg);
+    cursor: pointer;
+    width: 20px;
+    height: 20px;
+  }

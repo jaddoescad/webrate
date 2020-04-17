@@ -20,6 +20,7 @@ var db = firebase.firestore();
 
 let average = (array) => array.reduce((a, b) => a + b) / array.length;
 
+//activates when you change tabs
 chrome.tabs.onActivated.addListener(function (activeInfo, tab) {
   chrome.tabs.query(
     {
@@ -27,109 +28,31 @@ chrome.tabs.onActivated.addListener(function (activeInfo, tab) {
       active: true,
     },
     function (tabs) {
-      chrome.browserAction.setBadgeText({
-        text: "",
-      });
-      // $('#total').text(tabs[0].url);
-      //   var randomnum = Math.floor(Math.random() * (5 - 0) + 0) / 100;
-      //   chrome.browserAction.setBadgeText({
-      //     text: randomnum.toString(),
-      //   });
-      // console.log(tabs[0].url);
-      // console.log(get_domain(tabs[0].url));
-
       var domain = get_domain(tabs[0].url);
-      get_myrating(domain);
-      var averageReview = 0;
-
-      db.collection("Reviews")
-        .where("domain", "in", [domain])
-        .get()
-        .then(function (querySnapshot) {
-          querySnapshot = snapshotToArray(querySnapshot);
-          //   console.log(querySnapshot);
-          if (querySnapshot.length) {
-            let result = querySnapshot.map((a) => a.review);
-            averageReview = Math.round(average(result) * 10) / 10;
-
-            chrome.browserAction.setBadgeText({
-              text: averageReview.toString(),
-            });
-
-            var reviewObject = {};
-            reviewObject[domain.toString()] = {
-              average: averageReview.toString(),
-              total: querySnapshot.length,
-            };
-
-            // console.log(reviewObject);
-            chrome.storage.sync.set(reviewObject, function () {
-              //  A data saved callback omg so fancy
-              console.log("Object Stored");
-            });
-          } else {
-            chrome.browserAction.setBadgeText({
-              text: "",
-            });
-          }
-        });
+      emptyBadge();
+      set_my_rating_locally(domain);
+      get_current_website_review(domain);
     }
   );
 });
 
+//activates when you refresh tabs
 chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
-  chrome.browserAction.setBadgeText({
-    text: "",
-  });
+  emptyBadge();
   if (changeInfo.status == "complete") {
-    console.log("completed");
-
     var domain = get_domain(tab.url);
-    var averageReview = 0;
-    get_myrating(domain);
-
-    db.collection("Reviews")
-      .where("domain", "in", [domain])
-      .get()
-      .then(function (querySnapshot) {
-        querySnapshot = snapshotToArray(querySnapshot);
-        //   console.log(querySnapshot);
-        if (querySnapshot.length) {
-          let result = querySnapshot.map((a) => a.review);
-          averageReview = Math.round(average(result) * 10) / 10;
-
-          chrome.browserAction.setBadgeText({
-            text: averageReview.toString(),
-          });
-
-          var reviewObject = {};
-          reviewObject[domain.toString()] = {
-            average: averageReview.toString(),
-            total: querySnapshot.length,
-          };
-          // console.log(reviewObject);
-          chrome.storage.sync.set(reviewObject, function () {
-            //  A data saved callback omg so fancy
-            console.log("Object Stored");
-          });
-        } else {
-          chrome.browserAction.setBadgeText({
-            text: "",
-          });
-        }
-      });
-    // do your things
+    set_my_rating_locally(domain);
+    get_current_website_review(domain)
   }
 });
 
+//activates when a message is sent
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   var snapshots = [];
   var num_chunks;
 
   if (request.action == "get_reviews") {
-    // console.log(request.domains.length);
     var split_domains = chunk(request.domains, 2);
-    // console.log(request.domains);
     num_chunks = split_domains.length;
     split_domains.forEach(function (entry, i) {
       db.collection("Reviews")
@@ -144,7 +67,6 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
         .then(function () {
           if (i == num_chunks - 1) {
             var merged = [].concat.apply([], snapshots);
-            // console.log(merged);
             sendResponse(merged);
           }
         })
@@ -153,19 +75,11 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
         });
     });
   } else if (request.action == "get_tab_review") {
-    //   console.log(request.domain);
     chrome.storage.sync.get(request.domain, function (items) {
-      // console.log(items);
-      //  items = [ { "yourBody": "myBody" } ]
       sendResponse(items);
     });
   } else if (request.action == "get_my_review") {
-    //   console.log("getting my review");
     chrome.storage.sync.get(request.domain + "_myreview", function (items) {
-      // console.log(items);
-      //  items = [ { "yourBody": "myBody" } ]
-      // console.log("hello");
-      // console.log(items);
       sendResponse(items);
     });
   } else if (request.action == "add_review") {
@@ -199,7 +113,7 @@ function get_domain(url) {
   return domain;
 }
 
-function get_myrating(domain) {
+function set_my_rating_locally(domain) {
   firebase.auth().onAuthStateChanged(function (user) {
     if (user) {
       db.collection("Reviews")
@@ -212,19 +126,7 @@ function get_myrating(domain) {
           if (!querySnapshot.empty) {
             querySnapshot.forEach(function (doc) {
               if (doc.exists) {
-                console.log(doc.data().review);
-                // $("#rating-" + doc.data().review).prop("checked", true);
-                var myReview = {};
-                myReview[domain.toString() + "_myreview"] = {
-                  rating: doc.data().review,
-                };
-
-                // console.log(reviewObject);
-                console.log(myReview);
-                chrome.storage.sync.set(myReview, function () {
-                  //  A data saved callback omg so fancy
-                  console.log("my review Stored");
-                });
+                set_my_review(domain, doc.data().review);
               }
             });
           }
@@ -265,6 +167,7 @@ function updateFirebase(domain, rating, sendResponse) {
                   .then(function () {
                     console.log("Document successfully updated!");
                     sendResponse("success");
+                    set_my_review(domain, rating)
                   })
                   .catch(function (error) {
                     // The document probably doesn't exist.
@@ -280,7 +183,13 @@ function updateFirebase(domain, rating, sendResponse) {
             // User is signed in.
           } else {
             console.log("snapshot is empty");
-            add_review_to_firebase(review, domain, user.email, rating, sendResponse);
+            add_review_to_firebase(
+              review,
+              domain,
+              user.email,
+              rating,
+              sendResponse
+            );
           }
         })
         .catch(function (error) {
@@ -300,9 +209,64 @@ function add_review_to_firebase(review, domain, email, rating, sendResponse) {
     .then(function (docRef) {
       console.log("Document written with ID: ", docRef.id);
       sendResponse("success");
+      set_my_review(domain, rating);
     })
     .catch(function (error) {
       console.error("Error adding document: ", error);
       sendResponse("error");
     });
+}
+
+function set_my_review(domain, review) {
+  var myReview = {};
+  myReview[domain.toString() + "_myreview"] = {
+    rating: review,
+  };
+
+  // console.log(reviewObject);
+  console.log(myReview);
+  chrome.storage.sync.set(myReview, function () {
+    //  A data saved callback omg so fancy
+    console.log("my review Stored");
+  });
+}
+
+function emptyBadge() {
+  chrome.browserAction.setBadgeText({
+    text: "",
+  });
+}
+
+function setBadge(value) {
+  chrome.browserAction.setBadgeText({
+    text: value,
+  });
+}
+
+function get_current_website_review(domain) {
+  db.collection("Reviews")
+  .where("domain", "in", [domain])
+  .get()
+  .then(function (querySnapshot) {
+    querySnapshot = snapshotToArray(querySnapshot);
+    if (querySnapshot.length) {
+      let result = querySnapshot.map((a) => a.review);
+      var averageReview = Math.round(average(result) * 10) / 10;
+      setBadge(averageReview.toString());
+      var reviewObject = {};
+      reviewObject[domain.toString()] = {
+        average: averageReview.toString(),
+        total: querySnapshot.length,
+      };
+      chrome.storage.sync.set(reviewObject, function () {
+        console.log("Object Stored");
+      });
+    } else {
+      emptyBadge();
+    }
+  });
+}
+
+function save_my_rating() {
+
 }

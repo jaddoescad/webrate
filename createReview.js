@@ -34,46 +34,7 @@ var uiConfig = {
   },
 };
 
-// Initialize the FirebaseUI Widget using Firebase.
-var ui = new firebaseui.auth.AuthUI(firebase.auth());
-// The start method will wait until the DOM is loaded.
-firebase.auth().onAuthStateChanged(function (user) {
-  if (user) {
-    // User is signed in.
-    console.log("already signed in");
-    console.log(user);
-    // $(".main-page").css({"display":""});
-    // var $yourUl = $("#yourUlId");
-    // $(".main-page").css("display", $(".main-page").css("display") === 'none' ? '' : 'none');
-    $(".username").text(user.displayName);
-    $(".email").text(user.email);
-    $(".LeaveReview").show();
-  } else {
-    // No user is signed in.
-    console.log("signing in");
-    ui.start("#firebaseui-auth-container", uiConfig);
-    $(".LeaveReview").hide();
-  }
-});
 
-$(function () {
-  $("#sb").click(function (e) {
-    e.preventDefault();
-    console.log("signin out");
-    firebase
-      .auth()
-      .signOut()
-      .then(
-        function () {
-          console.log("Signed Out");
-          // window.location.href = "popup.html";
-        },
-        function (error) {
-          console.error("Sign Out Error", error);
-        }
-      );
-  });
-});
 
 $(function () {
   var url;
@@ -84,8 +45,6 @@ $(function () {
     },
     function (tabs) {
       url = new URL(tabs[0].url);
-      console.log(url);
-      console.log(get_domain(url));
       $(".website-url").text(get_domain(url));
     }
   );
@@ -144,6 +103,7 @@ $(function () {
         url = new URL(tabs[0].url);
         
        var rating = response[get_domain(url)+"_myreview"].rating;
+       $(".review-text").text("You left a "+rating+" star review.");
         // console.log(rating)
        $("#rating-"+String(rating)).prop("checked", true);
 
