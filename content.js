@@ -61,7 +61,18 @@ chrome.runtime.sendMessage(
           // console.log(averageReview*20);
           addScore(averageReview * 20, String(i), $("#" + String(i)));
         } else {
-          $(this).parent().parent().append("<p>No Reviews.</p>");
+          // $(this).parent().parent().append("<p>No Reviews.</p>");
+          $(this)
+            .parent()
+            .parent()
+            .append(
+              "<div class='ratingView'><div class='stars' id ='" +
+                String(i) +
+                "'></div>" +
+                "<div class='numReviews'> No Reviews."+"</div></div>"
+            );
+
+            addScore(0, String(i), $("#" + String(i)));
         }
       });
   }
