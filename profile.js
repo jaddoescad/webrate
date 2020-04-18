@@ -47,8 +47,8 @@ $(function () {
       // $(".main-page").css({"display":""});
       // var $yourUl = $("#yourUlId");
       // $(".main-page").css("display", $(".main-page").css("display") === 'none' ? '' : 'none');
-      $(".username").text(user.displayName);
-      $(".email").text(user.email);
+      $(".username").text("Name: "+user.displayName);
+      $(".email").text("Email: "+ user.email);
       setTimeout(function () {
         $(".profileUI").show();
         $("#overlay").fadeOut(300);

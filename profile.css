@@ -1,7 +1,7 @@
 body {
     margin: 0px !important;
     width: 400px;
-    height: 400px
+    height: 250px
 }
 
 #overlay{	
@@ -67,3 +67,36 @@ body {
     font-weight: 600;
     font-size: 1.3rem;
 }
+
+.username {
+    font-size: 1rem;
+    padding-top: 20px;
+    padding-left: 20px;
+}
+
+.email {
+    font-size: 1rem;
+    padding-top: 10px;
+    padding-left: 20px;
+}
+
+.review-button-div{
+    text-decoration:none;
+    padding-top: 30px;
+    width: 100%;
+    text-align: center;
+    /* padding-top: 1000px; */
+    /* padding-bottom: 30px; */
+    /* margin: 0 auto; */
+    
+  }
+
+  .signout {
+    background-color: black;
+    border: none;
+    color: white;
+    padding: 16px 32px;
+    text-decoration: none;
+    margin: 4px 2px;
+    cursor: pointer;
+  }

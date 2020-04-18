@@ -60,6 +60,7 @@ firebase.auth().onAuthStateChanged(function (user) {
     $(".LeaveReview").hide();
     $(".main-page").hide();
     loggingIn = true
+    $(".website-url").text("Authenticate");
     ui.start("#firebaseui-auth-container", uiConfig);
     setTimeout(function () {
       $(".profileUI").show();

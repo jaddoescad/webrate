@@ -46,7 +46,7 @@ $(function(){
                 $('.review_num').text(response[domain].average+' ('+response[domain].total+ ')')
             } else {
                 console.log('here');
-                $('.noreviews').text('No Reviews.');
+                $('.noreviews').text(': No Reviews.');
             }
 
           });
