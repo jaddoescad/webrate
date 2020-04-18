@@ -38,11 +38,12 @@ chrome.tabs.onActivated.addListener(function (activeInfo, tab) {
 
 //activates when you refresh tabs
 chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
-  emptyBadge();
+  // console.log("emptying");
+  // emptyBadge();
   if (changeInfo.status == "complete") {
     var domain = get_domain(tab.url);
     set_my_rating_locally(domain);
-    get_current_website_review(domain)
+    get_current_website_review(domain);
   }
 });
 
@@ -267,6 +268,3 @@ function get_current_website_review(domain) {
   });
 }
 
-function save_my_rating() {
-
-}
