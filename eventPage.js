@@ -1,8 +1,3 @@
-var menuItem = {
-  id: "spendMoney",
-  title: "Spend Money",
-  contexts: ["selection"],
-};
 
 var firebaseConfig = {
   apiKey: "AIzaSyBXDmVgIJ4ZSLOz3xub6YjCp8jDOgLlFSg",

@@ -23,7 +23,7 @@ $(function(){
                 message: "Total has been reset to 0."
             };
            
-            chrome.notifications.create('resetNotif', notifOptions);
+            // chrome.notifications.create('resetNotif', notifOptions);
            
         });
     });
