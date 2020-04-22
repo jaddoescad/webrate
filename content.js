@@ -31,17 +31,35 @@ chrome.runtime.sendMessage(
       .parent("a")
       .each(function (i) {
         var domain = get_domain($(this).attr("href"));
+        
         var filtered_reviews = response.filter(function (resp) {
           return resp.domain == domain;
         });
         if (filtered_reviews.length) {
+
+
+
           filtered_reviews = remove_duplicates_es6(filtered_reviews);
 
-          filtered_reviews = filtered_reviews.filter(function (a) {
-            return !this[a.timestamp] && (this[a.timestamp] = true);
-          }, Object.create(null));
 
-          console.log(filtered_reviews);
+
+
+
+
+
+
+          // filtered_reviews = filtered_reviews.filter(function (a) {
+          //   console.log(a.timestamp);
+          //   console.log(this[a.timestamp]);
+
+          //   return !this[a.timestamp] && (this[a.timestamp] = true);
+          // }, Object.create(null));
+
+
+
+
+
+
           let result = filtered_reviews.map((a) => a.review);
           var averageReview = Math.round(average(result) * 10) / 10;
           $(this)
@@ -60,6 +78,7 @@ chrome.runtime.sendMessage(
             );
           // console.log(averageReview*20);
           addScore(averageReview * 20, String(i), $("#" + String(i)));
+
         } else {
           // $(this).parent().parent().append("<p>No Reviews.</p>");
           $(this)

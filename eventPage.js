@@ -48,9 +48,19 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   var num_chunks;
 
   if (request.action == "get_reviews") {
+
+
+
+
+
+
     var split_domains = chunk(request.domains, 2);
     num_chunks = split_domains.length;
     split_domains.forEach(function (entry, i) {
+
+
+
+      
       db.collection("Reviews")
         .where("domain", "in", entry)
         .get()
@@ -70,6 +80,19 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
           console.log("Error getting documents: ", error);
         });
     });
+
+
+
+
+
+
+
+
+
+
+
+
+
   } else if (request.action == "get_tab_review") {
     chrome.storage.sync.get(request.domain, function (items) {
       sendResponse(items);
