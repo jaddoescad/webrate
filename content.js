@@ -21,6 +21,7 @@ $("h3")
     var domain = get_domain($(this).attr("href"));
 
     domains.push(domain);
+    domains = remove_duplicates_es6(domains);
   });
 
 chrome.runtime.sendMessage(
@@ -40,24 +41,6 @@ chrome.runtime.sendMessage(
 
 
           filtered_reviews = remove_duplicates_es6(filtered_reviews);
-
-
-
-
-
-
-
-
-          // filtered_reviews = filtered_reviews.filter(function (a) {
-          //   console.log(a.timestamp);
-          //   console.log(this[a.timestamp]);
-
-          //   return !this[a.timestamp] && (this[a.timestamp] = true);
-          // }, Object.create(null));
-
-
-
-
 
 
           let result = filtered_reviews.map((a) => a.review);
