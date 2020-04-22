@@ -47,7 +47,7 @@ body {
   }
 
   .header-background .Fresh.Mango {
-    background-image: url(backbutton.png);
+    background-image: url(assets/backbutton.png);
     cursor: pointer;
     width: 50px;
     background-repeat: no-repeat;
